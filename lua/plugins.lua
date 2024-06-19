@@ -362,6 +362,38 @@ require('lazy').setup({
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         tsserver = {},
         jdtls = {},
+        stylelint_lsp = {
+          filetypes = { 'css', 'scss' },
+          root_dir = require('lspconfig').util.root_pattern('package.json', '.git'),
+          settings = {
+            stylelintplus = {
+              autoFixOnFormat = true,
+              autoFixOnSave = true,
+            },
+          },
+          on_attach = function(client)
+            client.server_capabilities.document_formatting = false
+          end,
+        },
+        eslint = {
+          bin = 'eslint', -- or `eslint_d`
+          code_actions = {
+            enable = true,
+            apply_on_save = {
+              enable = true,
+              types = { 'directive', 'problem', 'suggestion', 'layout' },
+            },
+            disable_rule_comment = {
+              enable = true,
+              location = 'separate_line', -- or `same_line`
+            },
+          },
+          diagnostics = {
+            enable = true,
+            report_unused_disable_directives = false,
+            run_on = 'type', -- or `save`
+          },
+        },
         --
 
         lua_ls = {
@@ -446,12 +478,17 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use a sub-list to tell conform to run *until* a formatter
-        -- is found.
-        -- javascript = { { "prettierd", "prettier" } },
+        typescript = { { 'prettierd', 'prettier' } },
+        typescriptreact = { { 'prettierd', 'prettier' } },
+        javascript = { { 'prettierd', 'prettier' } },
+        javascriptreact = { { 'prettierd', 'prettier' } },
+        json = { { 'prettierd', 'prettier' } },
+        html = { { 'prettierd', 'prettier' } },
+        -- Use the "*" filetype to run formatters on all filetypes.
+        -- ['*'] = { 'codespell' },
+        -- Use the "_" filetype to run formatters on filetypes that don't
+        -- have other formatters configured.
+        ['_'] = { 'trim_whitespace' },
       },
     },
   },
