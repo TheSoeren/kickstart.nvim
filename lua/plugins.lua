@@ -360,7 +360,26 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-        tsserver = {},
+        tsserver = {
+          init_options = {
+            plugins = {
+              {
+                name = '@vue/typescript-plugin',
+                location = '/Users/fabianimhof/.nvm/versions/node/v16.20.2/lib/@vue/typescript-plugin',
+                languages = { 'javascript', 'typescript', 'vue' },
+              },
+            },
+          },
+          filetypes = {
+            'javascript',
+            'javascript.jsx',
+            'javascriptreact',
+            'typescript',
+            'typescriptreact',
+            'typescript.tsx',
+            'vue',
+          },
+        },
         jdtls = {},
         stylelint_lsp = {
           filetypes = { 'css', 'scss' },
@@ -394,6 +413,7 @@ require('lazy').setup({
             run_on = 'type', -- or `save`
           },
         },
+        volar = {},
         --
 
         lua_ls = {
@@ -426,7 +446,6 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
         'lua_ls',
-        'tsserver',
         'jdtls',
         'eslint_d',
         'stylelint',
@@ -478,12 +497,13 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        typescript = { { 'prettierd', 'prettier' } },
-        typescriptreact = { { 'prettierd', 'prettier' } },
-        javascript = { { 'prettierd', 'prettier' } },
-        javascriptreact = { { 'prettierd', 'prettier' } },
-        json = { { 'prettierd', 'prettier' } },
-        html = { { 'prettierd', 'prettier' } },
+        typescript = { 'prettier' },
+        typescriptreact = { 'prettier' },
+        javascript = { 'prettier' },
+        javascriptreact = { 'prettier' },
+        vue = { 'prettier' },
+        json = { 'prettier' },
+        html = { 'prettier' },
         -- Use the "*" filetype to run formatters on all filetypes.
         -- ['*'] = { 'codespell' },
         -- Use the "_" filetype to run formatters on filetypes that don't
