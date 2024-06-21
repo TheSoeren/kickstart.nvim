@@ -380,7 +380,6 @@ require('lazy').setup({
             'vue',
           },
         },
-        jdtls = {},
         stylelint_lsp = {
           filetypes = { 'css', 'scss' },
           root_dir = require('lspconfig').util.root_pattern('package.json', '.git'),
@@ -446,7 +445,6 @@ require('lazy').setup({
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
         'lua_ls',
-        'jdtls',
         'eslint_d',
         'stylelint',
       })
@@ -462,9 +460,6 @@ require('lazy').setup({
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
-
-          -- do nothing because we setup jdtls ourselves
-          ['jdtls'] = function() end,
         },
       }
     end,
@@ -489,7 +484,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, java = true }
         return {
           timeout_ms = 500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
@@ -508,7 +503,7 @@ require('lazy').setup({
         -- ['*'] = { 'codespell' },
         -- Use the "_" filetype to run formatters on filetypes that don't
         -- have other formatters configured.
-        ['_'] = { 'trim_whitespace' },
+        -- ['_'] = { 'trim_whitespace' },
       },
     },
   },

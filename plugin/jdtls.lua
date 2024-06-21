@@ -199,6 +199,7 @@ local function jdtls_setup(event)
     data_dir,
   }
 
+  local home = os.getenv 'HOME'
   local lsp_settings = {
     java = {
       -- jdt = {
@@ -229,9 +230,10 @@ local function jdtls_setup(event)
       -- },
       format = {
         enabled = true,
-        -- settings = {
-        --   profile = 'asdf'
-        -- },
+        settings = {
+          url = home .. '/.config/nvim/clavisit-eclipse-code-formatter.xml',
+          profile = 'ClavisJavaStyle',
+        },
       },
     },
     signatureHelp = {
