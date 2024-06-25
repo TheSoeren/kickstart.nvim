@@ -359,7 +359,6 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         tsserver = {
           init_options = {
             plugins = {
@@ -417,7 +416,6 @@ require('lazy').setup({
           filetypes = { 'yaml', 'yml', 'ansible' },
           single_file_support = false,
         },
-        --
 
         lua_ls = {
           -- cmd = {...},
