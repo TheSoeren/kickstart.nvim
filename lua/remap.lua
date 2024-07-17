@@ -35,7 +35,7 @@ vim.keymap.set('n', 'n', 'nzzzv')
 vim.keymap.set('n', 'N', 'Nzzzv')
 
 -- Replace highlighted text with yanked one
-vim.keymap.set('x', '<leader>p', '"_dP')
+vim.keymap.set('x', '<leader>pp', '"_dP')
 
 -- Make sure yanking works with d
 vim.keymap.set('n', '<leader>d', '"_d')
