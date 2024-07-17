@@ -416,6 +416,9 @@ require('lazy').setup({
           filetypes = { 'yaml', 'yml', 'ansible' },
           single_file_support = false,
         },
+        csharp_ls = {},
+        netcoredbg = {},
+        clangd = {},
 
         lua_ls = {
           -- cmd = {...},
@@ -450,6 +453,10 @@ require('lazy').setup({
         'eslint_d',
         'stylelint',
         'ansible-lint',
+        'clang-format',
+        'omnisharp',
+        'jdtls',
+        'prettier',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -502,11 +509,13 @@ require('lazy').setup({
         vue = { 'prettier' },
         json = { 'prettier' },
         html = { 'prettier' },
-        -- Use the "*" filetype to run formatters on all filetypes.
-        -- ['*'] = { 'codespell' },
-        -- Use the "_" filetype to run formatters on filetypes that don't
-        -- have other formatters configured.
-        -- ['_'] = { 'trim_whitespace' },
+
+        -- Conform can also run multiple formatters sequentially
+        -- python = { "isort", "black" },
+        --
+        -- You can use a sub-list to tell conform to run *until* a formatter
+        -- is found.
+        -- javascript = { { "prettierd", "prettier" } },
       },
     },
   },
