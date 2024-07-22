@@ -511,6 +511,7 @@ require('lazy').setup({
         vue = { 'prettier' },
         json = { 'prettier' },
         html = { 'prettier' },
+        scss = { 'prettier' },
 
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
