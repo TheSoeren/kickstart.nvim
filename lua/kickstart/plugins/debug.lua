@@ -14,7 +14,6 @@ return {
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
-    'mfussenegger/nvim-jdtls',
   },
   config = function()
     local dap = require 'dap'
@@ -22,32 +21,9 @@ return {
 
     require('mason-nvim-dap').setup {
       automatic_installation = true,
-      -- see mason-nvim-dap README for more information
       handlers = {},
       ensure_installed = {
-        'java-debug-adapter',
-        'java-test',
-      },
-    }
-
-    -- WARN: Activating this results in a "Handshake failed" error, not activating it
-    -- results in java debug-adapter not found!
-    --
-    -- dap.adapters.java = function(callback, config)
-    --   callback {
-    --     type = 'server',
-    --     host = '127.0.0.1',
-    --     port = 5005,
-    --   }
-    -- end
-
-    dap.configurations.java = {
-      {
-        type = 'java',
-        request = 'attach',
-        name = 'Attach (Remote)',
-        hostName = '127.0.0.1',
-        port = 5005,
+        -- add adapters etc..
       },
     }
 
