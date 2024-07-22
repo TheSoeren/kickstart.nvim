@@ -1,7 +1,5 @@
 return {
-  -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
-  -- NOTE: And you can specify dependencies as well
   dependencies = {
     -- Creates a beautiful debugger UI
     'rcarriga/nvim-dap-ui',
@@ -21,10 +19,9 @@ return {
 
     require('mason-nvim-dap').setup {
       automatic_installation = true,
+      -- see mason-nvim-dap README for more information
       handlers = {},
-      ensure_installed = {
-        -- add adapters etc..
-      },
+      ensure_installed = {},
     }
 
     vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
@@ -39,9 +36,31 @@ return {
     -- Dap UI setup
     -- For more information, see |:help nvim-dap-ui|
     dapui.setup {
-      -- Set icons to characters that are more likely to work in every terminal.
-      --    Feel free to remove or use ones that you like more! :)
-      --    Don't feel like these are good choices.
+      layouts = {
+        {
+          -- You can change the order of elements in the sidebar
+          elements = {
+            -- Provide IDs as strings or tables with "id" and "size" keys
+            {
+              id = 'scopes',
+              size = 0.35, -- Can be float or integer > 1
+            },
+            { id = 'breakpoints', size = 0.25 },
+            { id = 'stacks', size = 0.25 },
+            { id = 'watches', size = 0.25 },
+          },
+          size = 40,
+          position = 'left', -- Can be "left" or "right"
+        },
+        {
+          elements = {
+            'repl',
+            'console',
+          },
+          size = 20,
+          position = 'bottom', -- Can be "bottom" or "top"
+        },
+      },
       icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
       controls = {
         icons = {
