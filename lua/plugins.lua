@@ -152,7 +152,7 @@ require('lazy').setup({
             plugins = {
               {
                 name = '@vue/typescript-plugin',
-                location = os.getenv 'HOME' .. '.nvm/alias/default',
+                location = '/Users/fabianimhof/.nvm/versions/node/v16.20.2/lib/@vue/typescript-plugin',
                 languages = { 'javascript', 'typescript', 'vue' },
               },
             },
