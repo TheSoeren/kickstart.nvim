@@ -43,13 +43,13 @@ return {
             -- Provide IDs as strings or tables with "id" and "size" keys
             {
               id = 'scopes',
-              size = 0.35, -- Can be float or integer > 1
+              size = 0.25, -- Can be float or integer > 1
             },
             { id = 'breakpoints', size = 0.25 },
             { id = 'stacks', size = 0.25 },
             { id = 'watches', size = 0.25 },
           },
-          size = 40,
+          size = 60,
           position = 'left', -- Can be "left" or "right"
         },
         {
@@ -57,7 +57,7 @@ return {
             'repl',
             'console',
           },
-          size = 20,
+          size = 25,
           position = 'bottom', -- Can be "bottom" or "top"
         },
       },
@@ -81,7 +81,6 @@ return {
     vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
-    dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
   end,
 }

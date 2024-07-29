@@ -158,9 +158,6 @@ require('lazy').setup({
             },
           },
           filetypes = {
-            'javascript',
-            'javascript.jsx',
-            'javascriptreact',
             'typescript',
             'typescriptreact',
             'typescript.tsx',
