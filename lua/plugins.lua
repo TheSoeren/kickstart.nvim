@@ -25,7 +25,18 @@ require('lazy').setup({
     'neovim/nvim-lspconfig',
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
-      { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
+      {
+        'williamboman/mason.nvim', -- NOTE: Must be loaded before dependants
+        opts = {
+          ui = {
+            icons = {
+              package_installed = '✓',
+              package_pending = '➜',
+              package_uninstalled = '✗',
+            },
+          },
+        },
+      },
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       'nvim-java/nvim-java',
@@ -147,7 +158,7 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        tsserver = {
+        ts_ls = {
           init_options = {
             plugins = {
               {
@@ -160,6 +171,8 @@ require('lazy').setup({
           filetypes = {
             'typescript',
             'typescriptreact',
+            'javascript',
+            'javascriptreact',
             'typescript.tsx',
             'vue',
           },
@@ -178,7 +191,7 @@ require('lazy').setup({
           end,
         },
         eslint = {
-          bin = 'eslint', -- or `eslint_d`
+          bin = 'eslint_d', -- or `eslint`
           code_actions = {
             enable = true,
             apply_on_save = {
@@ -236,11 +249,13 @@ require('lazy').setup({
         'stylelint',
         'ansible-lint',
         'prettier',
+        { 'jdtls', version = 'v1.37.0' },
       })
 
       -- Skip automatic setup for servers
       local skip_setup = {
         'jdtls',
+        'ts_ls',
       }
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -254,14 +269,26 @@ require('lazy').setup({
 
             local server = servers[server_name] or {}
             -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for tsserver)
+            -- by the server configuration above.
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
           jdtls = function()
             require('java').setup {
               -- Your custom jdtls settings goes here
+              root_markers = {
+                'settings.gradle',
+                'settings.gradle.kts',
+                'pom.xml',
+                'build.gradle',
+                'mvnw',
+                'gradlew',
+                'build.gradle',
+                'build.gradle.kts',
+              },
+              jdk = {
+                auto_install = false,
+              },
             }
 
             require('lspconfig').jdtls.setup {
@@ -292,7 +319,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, java = true }
         return {
           timeout_ms = 500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
@@ -514,7 +541,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   { import = 'custom.plugins' },
