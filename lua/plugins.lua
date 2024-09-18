@@ -248,7 +248,7 @@ require('lazy').setup({
         'eslint_d',
         'stylelint',
         'ansible-lint',
-        'prettier',
+        'prettierd',
         { 'jdtls', version = 'v1.37.0' },
       })
 
@@ -327,14 +327,15 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        typescript = { 'prettier' },
-        typescriptreact = { 'prettier' },
-        javascript = { 'prettier' },
-        javascriptreact = { 'prettier' },
-        vue = { 'prettier' },
-        json = { 'prettier' },
-        html = { 'prettier' },
-        scss = { 'prettier' },
+        typescript = { 'prettierd' },
+        typescriptreact = { 'prettierd' },
+        javascript = { 'prettierd' },
+        javascriptreact = { 'prettierd' },
+        vue = { 'prettierd' },
+        json = { 'prettierd' },
+        html = { 'prettierd' },
+        scss = { 'prettierd' },
+        md = { 'prettierd' },
 
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },

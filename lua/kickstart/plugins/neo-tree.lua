@@ -15,6 +15,7 @@ return {
     { '<leader>pv', ':Neotree reveal=true position=float<CR>', { desc = 'NeoTree reveal' } },
   },
   opts = {
+    enable_git_status = true,
     window = {
       mappings = {
         ['<c-c>'] = 'close_window',
