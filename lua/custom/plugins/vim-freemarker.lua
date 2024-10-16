@@ -1,0 +1,1 @@
+return { 'andreshazard/vim-freemarker' }

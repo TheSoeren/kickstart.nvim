@@ -291,6 +291,16 @@ require('lazy').setup({
               jdk = {
                 auto_install = false,
               },
+              settings = {
+                java = {
+                  format = {
+                    settings = {
+                      url = '../clavisit-eclipse-code-formatter.xml',
+                      profile = 'clavisIT-Code-Formatter',
+                    },
+                  },
+                },
+              },
             }
 
             require('lspconfig').jdtls.setup {
@@ -543,7 +553,7 @@ require('lazy').setup({
   require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
