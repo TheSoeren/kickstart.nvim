@@ -8,7 +8,7 @@ return {
     'nvim-neotest/nvim-nio',
 
     -- Installs the debug adapters for you
-    'williamboman/mason.nvim',
+    'mason-org/mason.nvim',
     'jay-babu/mason-nvim-dap.nvim',
 
     -- Add your own debuggers here
@@ -38,6 +38,14 @@ return {
     dapui.setup {
       layouts = {
         {
+          elements = {
+            'repl',
+            'console',
+          },
+          size = 20,
+          position = 'bottom', -- Can be "bottom" or "top"
+        },
+        {
           -- You can change the order of elements in the sidebar
           elements = {
             -- Provide IDs as strings or tables with "id" and "size" keys
@@ -46,19 +54,10 @@ return {
               size = 0.25, -- Can be float or integer > 1
             },
             { id = 'breakpoints', size = 0.25 },
-            { id = 'stacks', size = 0.25 },
             { id = 'watches', size = 0.25 },
           },
           size = 60,
           position = 'left', -- Can be "left" or "right"
-        },
-        {
-          elements = {
-            'repl',
-            'console',
-          },
-          size = 25,
-          position = 'bottom', -- Can be "bottom" or "top"
         },
       },
       icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
@@ -82,5 +81,29 @@ return {
 
     dap.listeners.after.event_initialized['dapui_config'] = dapui.open
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
+
+    ---------------------------------------------------------------------------
+    -- Project-specific config (only active when cwd matches your project path)
+    ---------------------------------------------------------------------------
+    if vim.fn.getcwd():match 'intercity%-kredix%-2' then
+      dap.configurations.java = {
+        {
+          type = 'java',
+          request = 'launch',
+          name = 'Debug Kredix2Application (dev)',
+          mainClass = 'com.clavisit.intercity.kredix2.Kredix2Application',
+          projectName = 'kredix2',
+          vmArgs = '-Dspring.profiles.active=dev -Dspring.main.banner-mode=off',
+          cwd = '${workspaceFolder}',
+        },
+        {
+          type = 'java',
+          request = 'attach',
+          name = 'Attach to Kredix2 (port 5005)',
+          hostName = '127.0.0.1',
+          port = 5005,
+        },
+      }
+    end
   end,
 }

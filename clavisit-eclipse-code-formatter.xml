@@ -73,7 +73,7 @@
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_angle_bracket_in_type_parameters" value="do not insert"/>
 <setting id="org.eclipse.jdt.core.formatter.comment.clear_blank_lines_in_block_comment" value="false"/>
 <setting id="org.eclipse.jdt.core.formatter.insert_new_line_in_empty_type_declaration" value="insert"/>
-<setting id="org.eclipse.jdt.core.formatter.lineSplit" value="180"/>
+<setting id="org.eclipse.jdt.core.formatter.lineSplit" value="120"/>
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_paren_in_if" value="insert"/>
 <setting id="org.eclipse.jdt.core.formatter.insert_space_between_brackets_in_array_type_reference" value="do not insert"/>
 <setting id="org.eclipse.jdt.core.formatter.insert_space_after_opening_paren_in_parenthesized_expression" value="do not insert"/>
@@ -286,5 +286,10 @@
 <setting id="org.eclipse.jdt.core.formatter.insert_space_before_opening_angle_bracket_in_type_arguments" value="do not insert"/>
 <setting id="org.eclipse.jdt.core.formatter.never_indent_block_comments_on_first_column" value="false"/>
 <setting id="org.eclipse.jdt.core.formatter.keep_then_statement_on_same_line" value="false"/>
+<setting id="org.eclipse.jdt.core.formatter.wrap_method_calls" value="true"/>
+<setting id="org.eclipse.jdt.core.formatter.wrap_method_invocations" value="true"/>
+<setting id="org.eclipse.jdt.core.formatter.place_parens_on_new_line_in_method_invocation" value="true"/>
+<setting id="org.eclipse.jdt.core.formatter.keep_method_invocations_in_one_line" value="false"/>
+<setting id="org.eclipse.jdt.core.formatter.wrap_after_parameters_in_method_invocation" value="true"/>
 </profile>
 </profiles>

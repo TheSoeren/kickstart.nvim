@@ -26,8 +26,12 @@ require('lazy').setup({
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       {
-        'williamboman/mason.nvim', -- NOTE: Must be loaded before dependants
+        'mason-org/mason.nvim', -- NOTE: Must be loaded before dependants
         opts = {
+          registries = {
+            'github:nvim-java/mason-registry',
+            'github:mason-org/mason-registry',
+          },
           ui = {
             icons = {
               package_installed = '✓',
@@ -37,7 +41,7 @@ require('lazy').setup({
           },
         },
       },
-      'williamboman/mason-lspconfig.nvim',
+      'mason-org/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       'nvim-java/nvim-java',
 
@@ -151,35 +155,42 @@ require('lazy').setup({
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
 
+      -- Manual vue setup -> does not work with mason-lsp autosetup
+      -- WARN: DO NOT change any row in this setup. Everything can break it!
+      local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+      local vue_plugin = {
+        name = '@vue/typescript-plugin',
+        location = vue_language_server_path,
+        languages = { 'vue' },
+        configNamespace = 'typescript',
+      }
+      local vtsls_config = {
+        settings = {
+          vtsls = {
+            tsserver = {
+              globalPlugins = {
+                vue_plugin,
+              },
+            },
+          },
+        },
+        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+      }
+      local vue_ls_config = {}
+
+      vim.lsp.config('vtsls', vtsls_config)
+      vim.lsp.config('vue_ls', vue_ls_config)
+      vim.lsp.enable { 'vtsls', 'vue_ls' }
+
+      require('lspconfig').vtsls.setup(vtsls_config)
+
       --  Add any additional override configuration in the following tables. Available keys are:
       --  - cmd (table): Override the default command used to start the server
       --  - filetypes (table): Override the default list of associated filetypes for the server
       --  - capabilities (table): Override fields in capabilities. Can be used to disable certain LSP features.
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
-      local mason_registry = require 'mason-registry'
-      local vue_language_server_path = mason_registry.get_package('vue-language-server'):get_install_path() .. '/node_modules/@vue/language-server'
-
       local servers = {
-        ts_ls = {
-          init_options = {
-            plugins = {
-              {
-                name = '@vue/typescript-plugin',
-                location = vue_language_server_path,
-                languages = { 'javascript', 'typescript', 'vue' },
-              },
-            },
-          },
-          filetypes = {
-            'typescript',
-            'typescriptreact',
-            'javascript',
-            'javascriptreact',
-            'typescript.tsx',
-            'vue',
-          },
-        },
         stylelint_lsp = {
           filetypes = { 'css', 'scss' },
           root_dir = require('lspconfig').util.root_pattern('package.json', '.git'),
@@ -193,6 +204,7 @@ require('lazy').setup({
             client.server_capabilities.document_formatting = false
           end,
         },
+
         eslint = {
           bin = 'eslint_d', -- or `eslint`
           code_actions = {
@@ -212,23 +224,19 @@ require('lazy').setup({
             run_on = 'type', -- or `save`
           },
         },
-        volar = {},
+
         ansiblels = {
           filetypes = { 'yaml', 'yml', 'ansible' },
           single_file_support = false,
         },
 
         lua_ls = {
-          -- cmd = {...},
-          -- filetypes = { ...},
-          -- capabilities = {},
           settings = {
             Lua = {
               completion = {
                 callSnippet = 'Replace',
               },
-              -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-              -- diagnostics = { disable = { 'missing-fields' } },
+              diagnostics = { disable = { 'missing-fields' } },
             },
           },
         },
@@ -252,17 +260,21 @@ require('lazy').setup({
         'stylelint',
         'ansible-lint',
         'prettierd',
-        { 'jdtls', version = 'v1.37.0' },
       })
 
       -- Skip automatic setup for servers
       local skip_setup = {
-        'jdtls',
+        'vtsls',
+        'vue_ls',
       }
 
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
+      require('java').setup()
+
       require('mason-lspconfig').setup {
+        ensure_installed = {},
+        automatic_installation = false,
         handlers = {
           function(server_name)
             if vim.tbl_contains(skip_setup, server_name) then
@@ -275,40 +287,10 @@ require('lazy').setup({
             server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
             require('lspconfig')[server_name].setup(server)
           end,
-          jdtls = function()
-            require('java').setup {
-              -- Your custom jdtls settings goes here
-              root_markers = {
-                'settings.gradle',
-                'settings.gradle.kts',
-                'pom.xml',
-                'build.gradle',
-                'mvnw',
-                'gradlew',
-                'build.gradle',
-                'build.gradle.kts',
-              },
-              jdk = {
-                auto_install = false,
-              },
-            }
-
-            require('lspconfig').jdtls.setup {
-              -- Your custom nvim-java configuration goes here
-              settings = {
-                java = {
-                  format = {
-                    settings = {
-                      url = '../clavisit-eclipse-code-formatter.xml',
-                      profile = 'clavisIT-Code-Formatter',
-                    },
-                  },
-                },
-              },
-            }
-          end,
         },
       }
+
+      require('lspconfig').jdtls.setup {}
     end,
   },
 
@@ -522,7 +504,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
     opts = {
-      ensure_installed = { 'bash', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc', 'java' },
+      ensure_installed = { 'bash', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc', 'java', 'javascript', 'typescript', 'vue', 'css', 'scss' },
       auto_install = true,
       highlight = {
         enable = true,
