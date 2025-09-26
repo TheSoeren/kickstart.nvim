@@ -290,6 +290,11 @@ require('lazy').setup({
         },
       }
 
+      -- NOTE: This forces jdtls and nvim to use the java version provided by sdkman
+      local java_home = os.getenv 'HOME' .. '/.sdkman/candidates/java/current'
+      vim.env.JAVA_HOME = java_home
+      vim.env.PATH = java_home .. '/bin:' .. vim.env.PATH
+
       require('lspconfig').jdtls.setup {}
     end,
   },
