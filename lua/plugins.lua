@@ -19,7 +19,8 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  -- TODO: Fix indentation for java
+  -- 'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
   { -- LSP Configuration & Plugins
     'neovim/nvim-lspconfig',
@@ -260,6 +261,7 @@ require('lazy').setup({
         'stylelint',
         'ansible-lint',
         'prettierd',
+        'typescript-language-server',
       })
 
       -- Skip automatic setup for servers
@@ -318,7 +320,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true, java = true }
+        local disable_filetypes = { c = true, cpp = true }
         return {
           timeout_ms = 500,
           lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
