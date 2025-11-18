@@ -183,8 +183,6 @@ require('lazy').setup({
       vim.lsp.config('vue_ls', vue_ls_config)
       vim.lsp.enable { 'vtsls', 'vue_ls' }
 
-      require('lspconfig').vtsls.setup(vtsls_config)
-
       --  Add any additional override configuration in the following tables. Available keys are:
       --  - cmd (table): Override the default command used to start the server
       --  - filetypes (table): Override the default list of associated filetypes for the server
@@ -274,6 +272,10 @@ require('lazy').setup({
 
       require('java').setup()
 
+      for server_name, config in pairs(servers) do
+        vim.lsp.config(server_name, config)
+      end
+
       require('mason-lspconfig').setup {
         ensure_installed = {},
         automatic_installation = false,
@@ -283,11 +285,11 @@ require('lazy').setup({
               return
             end
 
-            local server = servers[server_name] or {}
+            local config = servers[server_name] or {}
             -- This handles overriding only values explicitly passed
             -- by the server configuration above.
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+            config.capabilities = vim.tbl_deep_extend('force', {}, capabilities, config.capabilities or {})
+            vim.lsp.config(server_name, config)
           end,
         },
       }
@@ -297,7 +299,7 @@ require('lazy').setup({
       vim.env.JAVA_HOME = java_home
       vim.env.PATH = java_home .. '/bin:' .. vim.env.PATH
 
-      require('lspconfig').jdtls.setup {}
+      vim.lsp.config('jdtls', {})
     end,
   },
 
